@@ -5,15 +5,15 @@ from discord.ext.commands import Bot, guild_only
 from pymongo import MongoClient
 
 
-bot_channel = 810496988692873247
-talk_channels = [810496908094210088,810499785563832380,810499880057176125,810501040020914176]
+bot_channel = #buraya botun mesaj atıcagı channeliin idsi 
+talk_channels = [#buraya botun mesajları aldığı kanallar ]
 
-level = ["Pan","Nypmha","Dryades"]
-levelnum = [5,10,15]
+level = ["Pan","Nypmha","Dryades"] #buraya level atlayınca hangi rolleri vermesi fln 
+levelnum = [5,10,15] #ne kadar varsa o kadar 5'in katlarıyla gidin.
 
-cluster = MongoClient("mongodb+srv://hakan155:hakan155@cluster0.iqtmc.mongodb.net/<dbname>?retryWrites=true&w=majority")
+cluster = MongoClient("mongodb+srv://<password>:username@cluster0.iqtmc.mongodb.net/<dbname>?retryWrites=true&w=majority") #buraya mongodb url'niz <password> yerındekı parantezleri cıkarn.
 
-levelling = cluster["discord"]["levelling"]
+levelling = cluster["discord"]["levelling"]  #buraya clusterlarının isimlerini gir 
 
 class levelsys(commands.Cog):
     def __init__(self, client):
@@ -21,10 +21,10 @@ class levelsys(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("DATEBASE")
+        print("adaxsasdkaskag")
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message):            #level
         if message.channel.id in talk_channels:
             stats = levelling.find_one({"id": message.author.id})
             if not message.author.bot:
@@ -50,11 +50,11 @@ class levelsys(commands.Cog):
                                 await message.channel.send(embed=embed)
 
     @commands.command()
-    async def rank(self, ctx):
+    async def rank(self, ctx):          #rank yeri 
         if ctx.channel.id == bot_channel:
             stats = levelling.find_one({"id": ctx.author.id})
             if stats is None:
-                embed = discord.Embed(descrpition="Mesaj göndermemişsin cryonics senin için üzgün :(")
+                embed = discord.Embed(descrpition="Mesaj göndermemişsin.")
                 await ctx.channel.send(embed=embed)
             else:
                 xp = stats["xp"]
@@ -82,23 +82,23 @@ class levelsys(commands.Cog):
 
 
 
-   # @commands.command()
-    #async def liderler(self, ctx):
-     #   if (ctx.channel.id == bot_channel):
-      #      rankings = levelling.find().sort("xp",-1)
-       #     i = 1
-        #    embed = discord.Embed(title="liderler:")
-         #   for x in rankings:
-          #      try:
-           #         temp = ctx.guild.get_member(x["id"])
-            #        tempxp = x["xp"]
-             #       embed.add_field(name=f"{i}: {temp.name}", value=f"Total XP: {tempxp}", inline=False)
-              #      i += 1
-               # except:
-                #    pass
-                #if i == 11:
-                 #       break
-            #await ctx.channel.send(embed=embed)
+    @commands.command()
+    async def liderler(self, ctx):           #topları gösterir
+        if (ctx.channel.id == bot_channel):
+            rankings = levelling.find().sort("xp",-1)
+            i = 1
+            embed = discord.Embed(title="liderler:")
+            for x in rankings:
+                try:
+                    temp = ctx.guild.get_member(x["id"])
+                    tempxp = x["xp"]
+                    embed.add_field(name=f"{i}: {temp.name}", value=f"Total XP: {tempxp}", inline=False)
+                    i += 1
+                except:
+                    pass
+                if i == 11:
+                        break
+            await ctx.channel.send(embed=embed)
 
 
 
